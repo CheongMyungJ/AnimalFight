@@ -222,6 +222,36 @@ class GameRenderer {
     this.ctx.strokeText(name, x, y + size / 2 + 12);
     this.ctx.fillText(name, x, y + size / 2 + 12);
 
+    // Buff icons
+    const buffs = animal.buffs || [];
+    if (buffs.length > 0) {
+      const buffIcons = {
+        'speed': '⚡',
+        'damage': '💪',
+        'shield': '🛡️'
+      };
+
+      const buffSize = 16;
+      const startX = x - (buffs.length * buffSize) / 2;
+
+      buffs.forEach((buff, index) => {
+        const icon = buffIcons[buff];
+        if (icon) {
+          // Buff icon background
+          this.ctx.fillStyle = 'rgba(0, 0, 0, 0.6)';
+          this.ctx.beginPath();
+          this.ctx.arc(startX + index * buffSize + buffSize / 2, y + size / 2 + 28, buffSize / 2 + 2, 0, Math.PI * 2);
+          this.ctx.fill();
+
+          // Buff icon
+          this.ctx.font = `${buffSize}px Arial`;
+          this.ctx.textAlign = 'center';
+          this.ctx.textBaseline = 'middle';
+          this.ctx.fillText(icon, startX + index * buffSize + buffSize / 2, y + size / 2 + 28);
+        }
+      });
+    }
+
     this.ctx.restore();
   }
 

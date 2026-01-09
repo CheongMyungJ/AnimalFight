@@ -92,6 +92,17 @@ class Animal {
   }
 
   toJSON() {
+    const buffs = [];
+    if (this.speedBuff && Date.now() < this.speedBuff.endTime) {
+      buffs.push('speed');
+    }
+    if (this.damageBuff) {
+      buffs.push('damage');
+    }
+    if (this.shield) {
+      buffs.push('shield');
+    }
+
     return {
       id: this.id,
       type: this.type,
@@ -101,7 +112,8 @@ class Animal {
       y: this.y,
       isAlive: this.isAlive,
       hp: this.hp,
-      maxHp: this.maxHp
+      maxHp: this.maxHp,
+      buffs: buffs
     };
   }
 }
