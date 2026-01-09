@@ -34,6 +34,17 @@ module.exports = {
     ANIMAL_SIZE: 50
   },
 
+  // 아이템 설정
+  ITEMS: [
+    { id: 0, type: 'health', name: '체력 회복', emoji: '❤️', effect: { hp: 20 } },
+    { id: 1, type: 'speed', name: '스피드 부스트', emoji: '⚡', effect: { speedMultiplier: 2, duration: 3000 } },
+    { id: 2, type: 'damage', name: '데미지 부스트', emoji: '💪', effect: { damageMultiplier: 2 } },
+    { id: 3, type: 'shield', name: '쉴드', emoji: '🛡️', effect: { damageReduction: 0.5 } }
+  ],
+  ITEM_SPAWN_INTERVAL: 5000,  // 5초마다 아이템 스폰
+  ITEM_MAX_COUNT: 3,          // 동시에 최대 3개
+  ITEM_SIZE: 30,              // 아이템 크기
+
   // 방 상태
   ROOM_STATES: {
     WAITING: 'waiting',

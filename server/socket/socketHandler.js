@@ -263,7 +263,15 @@ function startGameIfReady(room, io) {
     }
   };
 
-  room.startGame(onPositionUpdate, onAnimalEaten, onGameEnd, onDamage);
+  const onItemSpawn = (item) => {
+    io.to(room.roomId).emit(EVENTS.SERVER.ITEM_SPAWN, { item });
+  };
+
+  const onItemPickup = (data) => {
+    io.to(room.roomId).emit(EVENTS.SERVER.ITEM_PICKUP, data);
+  };
+
+  room.startGame(onPositionUpdate, onAnimalEaten, onGameEnd, onDamage, onItemSpawn, onItemPickup);
 
   io.to(room.roomId).emit(EVENTS.SERVER.GAME_START, {
     room: room.getState(),

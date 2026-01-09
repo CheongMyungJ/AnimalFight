@@ -3,9 +3,11 @@ class GameRenderer {
     this.canvas = canvas;
     this.ctx = canvas.getContext('2d');
     this.animals = [];
+    this.items = [];
     this.animationId = null;
     this.eatAnimations = [];
     this.damageAnimations = [];
+    this.itemPickupAnimations = [];
     this.images = {};
     this.imagesLoaded = false;
   }
@@ -37,6 +39,18 @@ class GameRenderer {
     this.animals = positions;
   }
 
+  addItem(item) {
+    this.items.push(item);
+  }
+
+  removeItem(itemId) {
+    this.items = this.items.filter(item => item.id !== itemId);
+  }
+
+  clearItems() {
+    this.items = [];
+  }
+
   async startRendering() {
     if (!this.imagesLoaded) {
       await this.loadImages();
@@ -59,9 +73,11 @@ class GameRenderer {
   render() {
     this.clearCanvas();
     this.drawBackground();
+    this.drawItems();
     this.drawAnimals();
     this.drawDamageAnimations();
     this.drawEatAnimations();
+    this.drawItemPickupAnimations();
   }
 
   clearCanvas() {
@@ -89,6 +105,35 @@ class GameRenderer {
       this.ctx.lineTo(this.canvas.width, i);
       this.ctx.stroke();
     }
+  }
+
+  drawItems() {
+    const now = Date.now();
+    this.items.forEach(item => {
+      this.ctx.save();
+
+      // 아이템 반짝임 효과
+      const pulse = Math.sin(now / 200) * 0.2 + 0.8;
+
+      // 아이템 배경 (원형 글로우)
+      const gradient = this.ctx.createRadialGradient(item.x, item.y, 0, item.x, item.y, item.size);
+      gradient.addColorStop(0, `rgba(255, 255, 255, ${0.9 * pulse})`);
+      gradient.addColorStop(0.5, `rgba(255, 255, 200, ${0.5 * pulse})`);
+      gradient.addColorStop(1, 'rgba(255, 255, 100, 0)');
+
+      this.ctx.fillStyle = gradient;
+      this.ctx.beginPath();
+      this.ctx.arc(item.x, item.y, item.size, 0, Math.PI * 2);
+      this.ctx.fill();
+
+      // 아이템 이모지
+      this.ctx.font = `${item.size}px Arial`;
+      this.ctx.textAlign = 'center';
+      this.ctx.textBaseline = 'middle';
+      this.ctx.fillText(item.emoji, item.x, item.y);
+
+      this.ctx.restore();
+    });
   }
 
   drawAnimals() {
@@ -233,6 +278,48 @@ class GameRenderer {
       opacity: 1,
       scale: 1,
       startTime: Date.now()
+    });
+  }
+
+  addItemPickupAnimation(x, y, emoji, name) {
+    this.itemPickupAnimations.push({
+      x: x,
+      y: y,
+      emoji: emoji,
+      name: name,
+      opacity: 1,
+      offsetY: 0,
+      startTime: Date.now()
+    });
+  }
+
+  drawItemPickupAnimations() {
+    const now = Date.now();
+
+    this.itemPickupAnimations = this.itemPickupAnimations.filter(anim => {
+      const elapsed = now - anim.startTime;
+      const duration = 1000;
+
+      if (elapsed > duration) return false;
+
+      const progress = elapsed / duration;
+      anim.opacity = 1 - progress;
+      anim.offsetY = -40 * progress;
+
+      this.ctx.save();
+      this.ctx.globalAlpha = anim.opacity;
+      this.ctx.font = 'bold 16px Arial';
+      this.ctx.textAlign = 'center';
+      this.ctx.fillStyle = '#ffff00';
+      this.ctx.strokeStyle = '#000';
+      this.ctx.lineWidth = 3;
+
+      const text = `${anim.emoji} ${anim.name}`;
+      this.ctx.strokeText(text, anim.x, anim.y + anim.offsetY - 50);
+      this.ctx.fillText(text, anim.x, anim.y + anim.offsetY - 50);
+      this.ctx.restore();
+
+      return true;
     });
   }
 

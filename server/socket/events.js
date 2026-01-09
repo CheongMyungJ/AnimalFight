@@ -30,6 +30,8 @@ module.exports = {
     GAME_OVER: 'game_over',
     ERROR: 'error',
     CHAT_MESSAGE: 'chat_message',
-    CHEER_EFFECT: 'cheer_effect'
+    CHEER_EFFECT: 'cheer_effect',
+    ITEM_SPAWN: 'item_spawn',
+    ITEM_PICKUP: 'item_pickup'
   }
 };

@@ -4,12 +4,15 @@ const TimingController = require('./TimingController');
 const config = require('../config/gameConfig');
 
 class GameEngine {
-  constructor(roomId, onPositionUpdate, onAnimalEaten, onGameEnd, onDamage) {
+  constructor(roomId, onPositionUpdate, onAnimalEaten, onGameEnd, onDamage, onItemSpawn, onItemPickup) {
     this.roomId = roomId;
     this.animals = [];
+    this.items = [];
+    this.itemIdCounter = 0;
     this.timingController = new TimingController();
     this.collisionManager = new CollisionManager();
     this.gameLoop = null;
+    this.itemSpawnTimer = null;
     this.isRunning = false;
     this.lastUpdateTime = null;
 
@@ -17,10 +20,14 @@ class GameEngine {
     this.onAnimalEaten = onAnimalEaten || (() => {});
     this.onGameEnd = onGameEnd || (() => {});
     this.onDamage = onDamage || (() => {});
+    this.onItemSpawn = onItemSpawn || (() => {});
+    this.onItemPickup = onItemPickup || (() => {});
   }
 
   initializeGame() {
     this.animals = [];
+    this.items = [];
+    this.itemIdCounter = 0;
     const centerX = config.CANVAS.WIDTH / 2;
     const centerY = config.CANVAS.HEIGHT / 2;
     const radius = 180;
@@ -51,6 +58,77 @@ class GameEngine {
     this.timingController.reset();
   }
 
+  spawnItem() {
+    if (this.items.length >= config.ITEM_MAX_COUNT) return;
+
+    const padding = 50;
+    const x = padding + Math.random() * (config.CANVAS.WIDTH - padding * 2);
+    const y = padding + Math.random() * (config.CANVAS.HEIGHT - padding * 2);
+
+    const itemType = config.ITEMS[Math.floor(Math.random() * config.ITEMS.length)];
+
+    const item = {
+      id: this.itemIdCounter++,
+      type: itemType.type,
+      name: itemType.name,
+      emoji: itemType.emoji,
+      effect: itemType.effect,
+      x: x,
+      y: y,
+      size: config.ITEM_SIZE
+    };
+
+    this.items.push(item);
+    this.onItemSpawn(item);
+  }
+
+  checkItemCollisions() {
+    const itemSize = config.ITEM_SIZE;
+
+    this.animals.forEach(animal => {
+      if (!animal.isAlive) return;
+
+      this.items = this.items.filter(item => {
+        const dx = animal.x - item.x;
+        const dy = animal.y - item.y;
+        const distance = Math.sqrt(dx * dx + dy * dy);
+        const minDistance = (animal.size + itemSize) / 2;
+
+        if (distance < minDistance) {
+          this.applyItemEffect(animal, item);
+          this.onItemPickup({
+            animalId: animal.id,
+            animalName: animal.name,
+            animalEmoji: animal.emoji,
+            item: item
+          });
+          return false; // 아이템 제거
+        }
+        return true;
+      });
+    });
+  }
+
+  applyItemEffect(animal, item) {
+    switch (item.type) {
+      case 'health':
+        animal.hp = Math.min(animal.maxHp, animal.hp + item.effect.hp);
+        break;
+      case 'speed':
+        animal.speedBuff = {
+          multiplier: item.effect.speedMultiplier,
+          endTime: Date.now() + item.effect.duration
+        };
+        break;
+      case 'damage':
+        animal.damageBuff = item.effect.damageMultiplier;
+        break;
+      case 'shield':
+        animal.shield = item.effect.damageReduction;
+        break;
+    }
+  }
+
   start() {
     this.initializeGame();
     this.timingController.start();
@@ -58,6 +136,16 @@ class GameEngine {
     this.lastUpdateTime = Date.now();
 
     this.gameLoop = setInterval(() => this.update(), config.POSITION_UPDATE_RATE);
+
+    // 아이템 스폰 타이머
+    this.itemSpawnTimer = setInterval(() => {
+      if (this.isRunning) {
+        this.spawnItem();
+      }
+    }, config.ITEM_SPAWN_INTERVAL);
+
+    // 첫 아이템 즉시 스폰
+    setTimeout(() => this.spawnItem(), 2000);
   }
 
   update() {
@@ -79,9 +167,20 @@ class GameEngine {
       if (animal.isAlive) {
         animal.centerBias = centerBias;
         animal.update(deltaTime, bounds);
-        animal.setSpeed(speedMultiplier);
+
+        // 스피드 버프 적용
+        let finalSpeedMult = speedMultiplier;
+        if (animal.speedBuff && now < animal.speedBuff.endTime) {
+          finalSpeedMult *= animal.speedBuff.multiplier;
+        } else if (animal.speedBuff) {
+          animal.speedBuff = null; // 버프 만료
+        }
+        animal.setSpeed(finalSpeedMult);
       }
     });
+
+    // 아이템 충돌 체크
+    this.checkItemCollisions();
 
     if (this.timingController.shouldForceCollision()) {
       this.forceCollision();
@@ -170,11 +269,16 @@ class GameEngine {
       clearInterval(this.gameLoop);
       this.gameLoop = null;
     }
+    if (this.itemSpawnTimer) {
+      clearInterval(this.itemSpawnTimer);
+      this.itemSpawnTimer = null;
+    }
   }
 
   getState() {
     return {
       animals: this.animals.map(a => a.toJSON()),
+      items: this.items,
       isRunning: this.isRunning,
       elapsed: this.timingController.getElapsedTime(),
       remainingCount: this.animals.filter(a => a.isAlive).length

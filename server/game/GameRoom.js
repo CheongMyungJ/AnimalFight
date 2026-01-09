@@ -103,7 +103,7 @@ class GameRoom {
     return this.bets.size === this.players.size;
   }
 
-  startGame(onPositionUpdate, onAnimalEaten, onGameEnd, onDamage) {
+  startGame(onPositionUpdate, onAnimalEaten, onGameEnd, onDamage, onItemSpawn, onItemPickup) {
     this.state = ROOM_STATES.PLAYING;
 
     this.players.forEach((player, socketId) => {
@@ -118,7 +118,9 @@ class GameRoom {
       onPositionUpdate,
       onAnimalEaten,
       onGameEnd,
-      onDamage
+      onDamage,
+      onItemSpawn,
+      onItemPickup
     );
 
     this.gameEngine.start();

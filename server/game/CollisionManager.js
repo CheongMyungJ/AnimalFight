@@ -30,9 +30,32 @@ class CollisionManager {
   }
 
   processCollision(a1, a2, onDamage) {
-    // 양쪽 모두 랜덤 데미지
-    const damage1 = this.getRandomDamage();
-    const damage2 = this.getRandomDamage();
+    // 기본 랜덤 데미지
+    let damage1 = this.getRandomDamage();
+    let damage2 = this.getRandomDamage();
+
+    // 데미지 버프 적용
+    if (a2.damageBuff) {
+      damage1 *= a2.damageBuff;
+      a2.damageBuff = null; // 1회용
+    }
+    if (a1.damageBuff) {
+      damage2 *= a1.damageBuff;
+      a1.damageBuff = null; // 1회용
+    }
+
+    // 쉴드 적용
+    if (a1.shield) {
+      damage1 *= (1 - a1.shield);
+      a1.shield = null; // 1회용
+    }
+    if (a2.shield) {
+      damage2 *= (1 - a2.shield);
+      a2.shield = null; // 1회용
+    }
+
+    damage1 = Math.floor(damage1);
+    damage2 = Math.floor(damage2);
 
     a1.takeDamage(damage1);
     a2.takeDamage(damage2);

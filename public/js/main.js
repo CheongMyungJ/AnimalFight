@@ -69,6 +69,23 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
   }
 
+  // 아이템 획득 사운드
+  function playItemSound() {
+    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+    osc.connect(gain);
+    gain.connect(audioCtx.destination);
+    osc.frequency.setValueAtTime(600, audioCtx.currentTime);
+    osc.frequency.exponentialRampToValueAtTime(1200, audioCtx.currentTime + 0.1);
+    osc.type = 'sine';
+    gain.gain.setValueAtTime(0.3, audioCtx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.2);
+    osc.start(audioCtx.currentTime);
+    osc.stop(audioCtx.currentTime + 0.2);
+  }
+
   // 응원 사운드 재생
   function playCheerSound() {
     const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
@@ -350,6 +367,11 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     // 게임 채팅 초기화
     document.getElementById('game-chat-messages').innerHTML = '';
+
+    // 아이템 초기화
+    if (renderer) {
+      renderer.clearItems();
+    }
   });
 
   socket.on('position_update', (data) => {
@@ -375,6 +397,31 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     const loserAnimal = animals.find(a => a.id === data.loser.id);
     ui.showToast(`${data.winner.emoji}${data.winner.name}이(가) ${data.loser.emoji}${data.loser.name}을(를) 잡아먹었습니다!`);
+  });
+
+  // 아이템 스폰
+  socket.on('item_spawn', (data) => {
+    if (renderer) {
+      renderer.addItem(data.item);
+    }
+  });
+
+  // 아이템 획득
+  socket.on('item_pickup', (data) => {
+    if (renderer) {
+      renderer.removeItem(data.item.id);
+
+      // 획득 동물 위치 찾기
+      const animal = renderer.animals.find(a => a.id === data.animalId);
+      if (animal) {
+        renderer.addItemPickupAnimation(animal.x, animal.y, data.item.emoji, data.item.name);
+      }
+    }
+
+    // 아이템 획득 효과음
+    playItemSound();
+
+    ui.showToast(`${data.animalEmoji}${data.animalName}이(가) ${data.item.emoji}${data.item.name}을(를) 획득!`);
   });
 
   socket.on('game_result', (data) => {
