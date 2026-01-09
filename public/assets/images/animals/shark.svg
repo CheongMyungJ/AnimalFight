@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <!-- Body -->
+  <ellipse cx="50" cy="55" rx="45" ry="30" fill="#5D6D7E"/>
+  <!-- Belly -->
+  <ellipse cx="50" cy="65" rx="35" ry="18" fill="#D5DBDB"/>
+  <!-- Dorsal fin -->
+  <path d="M50 25 L40 45 L60 45 Z" fill="#5D6D7E"/>
+  <!-- Side fins -->
+  <path d="M15 55 L5 70 L25 60 Z" fill="#5D6D7E"/>
+  <path d="M85 55 L95 70 L75 60 Z" fill="#5D6D7E"/>
+  <!-- Eyes -->
+  <ellipse cx="30" cy="50" rx="6" ry="7" fill="#1a1a1a"/>
+  <ellipse cx="70" cy="50" rx="6" ry="7" fill="#1a1a1a"/>
+  <circle cx="32" cy="48" r="2" fill="#FFF"/>
+  <circle cx="72" cy="48" r="2" fill="#FFF"/>
+  <!-- Gills -->
+  <line x1="35" y1="58" x2="35" y2="68" stroke="#4A5568" stroke-width="2"/>
+  <line x1="40" y1="58" x2="40" y2="68" stroke="#4A5568" stroke-width="2"/>
+  <line x1="45" y1="58" x2="45" y2="66" stroke="#4A5568" stroke-width="2"/>
+  <line x1="55" y1="58" x2="55" y2="66" stroke="#4A5568" stroke-width="2"/>
+  <line x1="60" y1="58" x2="60" y2="68" stroke="#4A5568" stroke-width="2"/>
+  <line x1="65" y1="58" x2="65" y2="68" stroke="#4A5568" stroke-width="2"/>
+  <!-- Mouth -->
+  <path d="M35 75 Q50 82 65 75" stroke="#1a1a1a" stroke-width="2" fill="none"/>
+  <!-- Teeth -->
+  <path d="M38 75 L40 80 L42 75" fill="#FFF"/>
+  <path d="M46 76 L48 81 L50 76" fill="#FFF"/>
+  <path d="M54 76 L56 81 L58 76" fill="#FFF"/>
+  <path d="M58 75 L60 80 L62 75" fill="#FFF"/>
+</svg>

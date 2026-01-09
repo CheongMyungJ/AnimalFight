@@ -1,0 +1,820 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+  color: #fff;
+  min-height: 100vh;
+}
+
+#app {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.screen {
+  display: none;
+}
+
+.screen.active {
+  display: block;
+}
+
+h1 {
+  font-size: 3rem;
+  text-align: center;
+  margin-bottom: 10px;
+  background: linear-gradient(45deg, #f39c12, #e74c3c);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+h2 {
+  font-size: 1.8rem;
+  margin-bottom: 15px;
+}
+
+.subtitle {
+  text-align: center;
+  color: #888;
+  margin-bottom: 40px;
+}
+
+.input-group {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+input[type="text"] {
+  padding: 12px 20px;
+  font-size: 1rem;
+  border: 2px solid #333;
+  border-radius: 8px;
+  background: #2a2a4a;
+  color: #fff;
+  outline: none;
+  width: 250px;
+}
+
+input[type="text"]:focus {
+  border-color: #f39c12;
+}
+
+.button-group {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  margin: 20px 0;
+}
+
+.btn {
+  padding: 12px 30px;
+  font-size: 1rem;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s;
+  font-weight: bold;
+}
+
+.btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.btn-primary {
+  background: linear-gradient(45deg, #f39c12, #e74c3c);
+  color: #fff;
+}
+
+.btn-primary:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 20px rgba(243, 156, 18, 0.4);
+}
+
+.btn-secondary {
+  background: #3498db;
+  color: #fff;
+}
+
+.btn-secondary:hover:not(:disabled) {
+  background: #2980b9;
+}
+
+.btn-danger {
+  background: #c0392b;
+  color: #fff;
+}
+
+.btn-danger:hover:not(:disabled) {
+  background: #a93226;
+}
+
+.divider {
+  text-align: center;
+  color: #666;
+  margin: 30px 0;
+  position: relative;
+}
+
+.divider::before,
+.divider::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  width: 100px;
+  height: 1px;
+  background: #333;
+}
+
+.divider::before {
+  left: calc(50% - 150px);
+}
+
+.divider::after {
+  right: calc(50% - 150px);
+}
+
+/* 방 목록 */
+.room-list-container {
+  margin: 30px 0;
+}
+
+.room-list-container h3 {
+  text-align: center;
+  color: #f39c12;
+  margin-bottom: 15px;
+}
+
+.room-list {
+  max-height: 250px;
+  overflow-y: auto;
+  background: #2a2a4a;
+  border-radius: 12px;
+  padding: 15px;
+}
+
+.room-list .no-rooms {
+  text-align: center;
+  color: #666;
+  padding: 20px;
+}
+
+.room-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 15px;
+  background: #1a1a2e;
+  border-radius: 8px;
+  margin-bottom: 10px;
+  transition: all 0.3s;
+}
+
+.room-item:last-child {
+  margin-bottom: 0;
+}
+
+.room-item:hover {
+  background: #252545;
+  transform: translateX(5px);
+}
+
+.room-item .room-info-left {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.room-item .room-code {
+  font-weight: bold;
+  color: #f39c12;
+  font-size: 1.1rem;
+}
+
+.room-item .room-host {
+  color: #888;
+  font-size: 0.9rem;
+}
+
+.room-item .room-players {
+  color: #2ecc71;
+  font-size: 0.9rem;
+}
+
+.room-item .btn-join {
+  padding: 8px 20px;
+  font-size: 0.9rem;
+}
+
+/* 대기실 */
+.room-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  padding-bottom: 15px;
+  border-bottom: 1px solid #333;
+}
+
+.room-info {
+  display: flex;
+  gap: 20px;
+}
+
+.room-info span {
+  color: #aaa;
+}
+
+.room-info strong {
+  color: #f39c12;
+}
+
+.coins strong {
+  color: #2ecc71 !important;
+}
+
+.player-list {
+  background: #2a2a4a;
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 20px;
+}
+
+.player-list h3 {
+  margin-bottom: 15px;
+  color: #f39c12;
+}
+
+.player-list ul {
+  list-style: none;
+}
+
+.player-list li {
+  padding: 10px 15px;
+  background: #1a1a2e;
+  border-radius: 8px;
+  margin-bottom: 8px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.player-list li.host::after {
+  content: '👑 호스트';
+  font-size: 0.8rem;
+  color: #f39c12;
+}
+
+.player-list li .bet-status {
+  color: #2ecc71;
+  font-size: 0.9rem;
+}
+
+.min-players-notice {
+  color: #e74c3c;
+  font-size: 0.9rem;
+  margin-top: 10px;
+}
+
+/* 배팅 화면 */
+.timer strong {
+  color: #e74c3c !important;
+  font-size: 1.2rem;
+}
+
+.animal-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 15px;
+  margin-bottom: 30px;
+}
+
+.animal-btn {
+  background: #2a2a4a;
+  border: 3px solid #333;
+  border-radius: 12px;
+  padding: 20px;
+  cursor: pointer;
+  transition: all 0.3s;
+  text-align: center;
+}
+
+.animal-btn:hover {
+  border-color: #f39c12;
+  transform: translateY(-3px);
+}
+
+.animal-btn.selected {
+  border-color: #f39c12;
+  background: #3a3a5a;
+  box-shadow: 0 0 20px rgba(243, 156, 18, 0.3);
+}
+
+.animal-btn .emoji {
+  font-size: 3rem;
+  display: block;
+  margin-bottom: 10px;
+}
+
+.animal-btn .animal-img {
+  width: 70px;
+  height: 70px;
+  display: block;
+  margin: 0 auto 10px auto;
+}
+
+.animal-btn .name {
+  color: #fff;
+  font-weight: bold;
+}
+
+.bet-controls {
+  background: #2a2a4a;
+  border-radius: 12px;
+  padding: 25px;
+  text-align: center;
+}
+
+.selected-animal {
+  font-size: 1.2rem;
+  margin-bottom: 20px;
+}
+
+.selected-animal span {
+  color: #f39c12;
+  font-weight: bold;
+}
+
+.bet-amount {
+  margin-bottom: 20px;
+}
+
+.bet-amount label {
+  display: block;
+  margin-bottom: 10px;
+}
+
+.bet-amount #bet-amount-display {
+  color: #2ecc71;
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+input[type="range"] {
+  width: 80%;
+  max-width: 400px;
+  height: 8px;
+  -webkit-appearance: none;
+  background: #1a1a2e;
+  border-radius: 4px;
+  outline: none;
+}
+
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 24px;
+  height: 24px;
+  background: #f39c12;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.bet-range {
+  display: block;
+  color: #666;
+  font-size: 0.9rem;
+  margin-top: 10px;
+}
+
+/* 게임 화면 */
+.game-container {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+#game-canvas {
+  background: linear-gradient(180deg, #2d5016 0%, #1a3d0c 100%);
+  border-radius: 12px;
+  border: 4px solid #4a3c2a;
+}
+
+.my-bet-info {
+  text-align: center;
+  font-size: 1.2rem;
+  padding: 15px;
+  background: #2a2a4a;
+  border-radius: 8px;
+}
+
+.my-bet-info span {
+  color: #f39c12;
+  font-weight: bold;
+}
+
+/* 결과 화면 */
+.result-container {
+  text-align: center;
+}
+
+.winner-display {
+  margin: 30px 0;
+  padding: 30px;
+  background: linear-gradient(135deg, #2a2a4a 0%, #1a1a2e 100%);
+  border-radius: 16px;
+  border: 2px solid #f39c12;
+}
+
+.crown {
+  font-size: 2rem;
+  display: block;
+  margin-bottom: 10px;
+}
+
+.winner-emoji {
+  font-size: 5rem;
+  display: block;
+  margin-bottom: 10px;
+}
+
+.winner-emoji .winner-img {
+  width: 120px;
+  height: 120px;
+}
+
+.winner-name {
+  font-size: 1.5rem;
+  color: #f39c12;
+  font-weight: bold;
+}
+
+.results-list {
+  background: #2a2a4a;
+  border-radius: 12px;
+  padding: 20px;
+  margin: 20px 0;
+  text-align: left;
+}
+
+.result-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 12px 15px;
+  border-bottom: 1px solid #333;
+}
+
+.result-item:last-child {
+  border-bottom: none;
+}
+
+.result-item.win {
+  color: #2ecc71;
+}
+
+.result-item.lose {
+  color: #e74c3c;
+}
+
+.result-item .profit {
+  font-weight: bold;
+}
+
+.my-result {
+  padding: 20px;
+  border-radius: 12px;
+  margin: 20px 0;
+  font-size: 1.3rem;
+}
+
+.my-result.win {
+  background: rgba(46, 204, 113, 0.2);
+  border: 2px solid #2ecc71;
+}
+
+.my-result.lose {
+  background: rgba(231, 76, 60, 0.2);
+  border: 2px solid #e74c3c;
+}
+
+.next-round-notice {
+  color: #888;
+  margin-top: 20px;
+}
+
+/* 게임 오버 화면 */
+.gameover-container {
+  text-align: center;
+  padding: 40px 0;
+}
+
+.gameover-container h2 {
+  font-size: 2.5rem;
+  color: #e74c3c;
+  margin-bottom: 20px;
+}
+
+#gameover-message {
+  font-size: 1.3rem;
+  margin-bottom: 30px;
+}
+
+.final-results {
+  background: #2a2a4a;
+  border-radius: 12px;
+  padding: 20px;
+  margin: 20px auto;
+  max-width: 500px;
+  text-align: left;
+}
+
+.final-result-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 15px;
+  border-bottom: 1px solid #333;
+}
+
+.final-result-item:last-child {
+  border-bottom: none;
+}
+
+.final-result-item .coins {
+  color: #2ecc71;
+  font-weight: bold;
+}
+
+.final-result-item.eliminated .coins {
+  color: #e74c3c;
+}
+
+/* 토스트 */
+.toast {
+  position: fixed;
+  bottom: 30px;
+  left: 50%;
+  transform: translateX(-50%) translateY(100px);
+  background: #333;
+  color: #fff;
+  padding: 15px 30px;
+  border-radius: 8px;
+  opacity: 0;
+  transition: all 0.3s;
+  z-index: 1000;
+}
+
+.toast.show {
+  transform: translateX(-50%) translateY(0);
+  opacity: 1;
+}
+
+.toast.error {
+  background: #e74c3c;
+}
+
+.toast.success {
+  background: #2ecc71;
+}
+
+/* 채팅 */
+.chat-container {
+  background: #2a2a4a;
+  border-radius: 12px;
+  padding: 15px;
+  margin-top: 20px;
+  position: relative;
+}
+
+.chat-container.game-chat {
+  margin-top: 15px;
+}
+
+.chat-messages {
+  height: 150px;
+  overflow-y: auto;
+  background: #1a1a2e;
+  border-radius: 8px;
+  padding: 10px;
+  margin-bottom: 10px;
+}
+
+.chat-messages::-webkit-scrollbar {
+  width: 6px;
+}
+
+.chat-messages::-webkit-scrollbar-track {
+  background: #1a1a2e;
+  border-radius: 3px;
+}
+
+.chat-messages::-webkit-scrollbar-thumb {
+  background: #444;
+  border-radius: 3px;
+}
+
+.chat-message {
+  margin-bottom: 8px;
+  padding: 5px 0;
+  border-bottom: 1px solid #333;
+  animation: fadeIn 0.3s ease;
+}
+
+.chat-message:last-child {
+  border-bottom: none;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-5px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.chat-message .sender {
+  color: #f39c12;
+  font-weight: bold;
+  margin-right: 8px;
+}
+
+.chat-message .content {
+  color: #fff;
+  word-break: break-word;
+}
+
+.chat-message.system {
+  color: #888;
+  font-style: italic;
+  text-align: center;
+}
+
+.chat-message.cheer {
+  background: linear-gradient(90deg, rgba(46, 204, 113, 0.1), rgba(243, 156, 18, 0.1));
+  padding: 8px;
+  border-radius: 5px;
+  text-align: center;
+}
+
+.chat-message.cheer .content {
+  color: #2ecc71;
+}
+
+.chat-input-area {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.chat-input-area input {
+  flex: 1;
+  padding: 10px 15px;
+  font-size: 0.95rem;
+  width: auto;
+}
+
+.emoji-btn {
+  background: #3a3a5a;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 12px;
+  font-size: 1.2rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.emoji-btn:hover {
+  background: #4a4a6a;
+  transform: scale(1.1);
+}
+
+.btn-send {
+  background: #3498db;
+  color: #fff;
+  padding: 10px 20px;
+}
+
+.btn-send:hover {
+  background: #2980b9;
+}
+
+.btn-cheer {
+  background: linear-gradient(45deg, #2ecc71, #27ae60);
+  color: #fff;
+  padding: 10px 15px;
+  animation: pulse 2s infinite;
+}
+
+.btn-cheer:hover {
+  transform: scale(1.05);
+}
+
+@keyframes pulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(46, 204, 113, 0.4); }
+  50% { box-shadow: 0 0 0 8px rgba(46, 204, 113, 0); }
+}
+
+/* 이모지 피커 */
+.emoji-picker {
+  position: absolute;
+  bottom: 70px;
+  left: 15px;
+  background: #2a2a4a;
+  border: 2px solid #444;
+  border-radius: 12px;
+  padding: 10px;
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+  gap: 5px;
+  max-width: 320px;
+  z-index: 100;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.5);
+}
+
+.emoji-picker.hidden {
+  display: none;
+}
+
+.emoji-picker span {
+  font-size: 1.5rem;
+  cursor: pointer;
+  padding: 5px;
+  border-radius: 5px;
+  text-align: center;
+  transition: all 0.2s;
+}
+
+.emoji-picker span:hover {
+  background: #3a3a5a;
+  transform: scale(1.2);
+}
+
+/* 응원 효과 애니메이션 */
+.cheer-effect {
+  position: fixed;
+  font-size: 2rem;
+  pointer-events: none;
+  animation: cheerFloat 1s ease-out forwards;
+  z-index: 1000;
+}
+
+@keyframes cheerFloat {
+  0% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-100px) scale(1.5);
+  }
+}
+
+/* 반응형 */
+@media (max-width: 600px) {
+  .animal-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  #game-canvas {
+    width: 100%;
+    height: auto;
+  }
+
+  .room-header {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .chat-input-area {
+    flex-wrap: wrap;
+  }
+
+  .chat-input-area input {
+    width: 100%;
+    order: 1;
+  }
+
+  .emoji-btn {
+    order: 2;
+  }
+
+  .btn-send {
+    order: 3;
+    flex: 1;
+  }
+
+  .btn-cheer {
+    order: 4;
+    flex: 1;
+  }
+
+  .emoji-picker {
+    left: 5px;
+    right: 5px;
+    max-width: none;
+  }
+}

@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AnimalFight - 동물 배팅 게임</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <div id="app">
+    <!-- 로비 화면 -->
+    <div id="lobby-screen" class="screen active">
+      <h1>AnimalFight</h1>
+      <p class="subtitle">동물 배팅 게임</p>
+
+      <div class="input-group">
+        <input type="text" id="player-name" placeholder="닉네임 입력" maxlength="10">
+      </div>
+
+      <div class="button-group">
+        <button id="btn-create-room" class="btn btn-primary">방 만들기</button>
+        <button id="btn-refresh-rooms" class="btn btn-secondary">방 목록 새로고침</button>
+      </div>
+
+      <!-- 방 목록 -->
+      <div class="room-list-container">
+        <h3>참가 가능한 방</h3>
+        <div id="room-list" class="room-list">
+          <p class="no-rooms">방이 없습니다. 새로 만들어보세요!</p>
+        </div>
+      </div>
+
+      <div class="divider">또는 코드로 참가</div>
+
+      <div class="input-group">
+        <input type="text" id="room-code" placeholder="방 코드 입력" maxlength="8">
+        <button id="btn-join-room" class="btn btn-secondary">참가</button>
+      </div>
+    </div>
+
+    <!-- 대기실 화면 -->
+    <div id="waiting-screen" class="screen">
+      <div class="room-header">
+        <h2>대기실</h2>
+        <div class="room-info">
+          <span>방 코드: <strong id="room-code-display"></strong></span>
+          <span class="coins">코인: <strong id="coins-display">500</strong></span>
+        </div>
+      </div>
+
+      <div class="player-list">
+        <h3>참가자 (<span id="player-count">0</span>/8)</h3>
+        <ul id="players"></ul>
+        <p class="min-players-notice">최소 3명이 필요합니다</p>
+      </div>
+
+      <div class="button-group">
+        <button id="btn-start-game" class="btn btn-primary" disabled>게임 시작</button>
+        <button id="btn-leave-room" class="btn btn-danger">나가기</button>
+      </div>
+
+      <!-- 채팅 -->
+      <div class="chat-container">
+        <div class="chat-messages" id="waiting-chat-messages"></div>
+        <div class="chat-input-area">
+          <button class="emoji-btn" id="waiting-emoji-btn">😀</button>
+          <input type="text" id="waiting-chat-input" placeholder="메시지 입력..." maxlength="200">
+          <button class="btn btn-send" id="waiting-chat-send">전송</button>
+        </div>
+        <div class="emoji-picker hidden" id="waiting-emoji-picker"></div>
+      </div>
+    </div>
+
+    <!-- 배팅 화면 -->
+    <div id="betting-screen" class="screen">
+      <div class="room-header">
+        <h2>라운드 <span id="round-number">1</span> - 배팅</h2>
+        <div class="room-info">
+          <span class="timer">남은 시간: <strong id="betting-timer">15</strong>초</span>
+          <span class="coins">코인: <strong id="betting-coins">500</strong></span>
+        </div>
+      </div>
+
+      <div class="animal-grid" id="animal-grid">
+        <!-- 동물 버튼들이 동적으로 생성됨 -->
+      </div>
+
+      <div class="bet-controls">
+        <div class="selected-animal">
+          선택: <span id="selected-animal-name">없음</span>
+        </div>
+        <div class="bet-amount">
+          <label for="bet-slider">배팅액: <span id="bet-amount-display">50</span></label>
+          <input type="range" id="bet-slider" min="10" max="100" value="50">
+          <span class="bet-range">(10 ~ 100)</span>
+        </div>
+        <button id="btn-place-bet" class="btn btn-primary" disabled>배팅 확정</button>
+      </div>
+    </div>
+
+    <!-- 게임 화면 -->
+    <div id="game-screen" class="screen">
+      <div class="room-header">
+        <h2>라운드 <span id="game-round-number">1</span></h2>
+        <div class="room-info">
+          <span>남은 동물: <strong id="remaining-count">8</strong>/8</span>
+          <span class="coins">코인: <strong id="game-coins">500</strong></span>
+        </div>
+      </div>
+
+      <div class="game-container">
+        <canvas id="game-canvas" width="800" height="600"></canvas>
+      </div>
+
+      <div class="my-bet-info">
+        내 배팅: <span id="my-bet-animal"></span> <span id="my-bet-amount"></span>코인
+      </div>
+
+      <!-- 게임 중 채팅 -->
+      <div class="chat-container game-chat">
+        <div class="chat-messages" id="game-chat-messages"></div>
+        <div class="chat-input-area">
+          <button class="emoji-btn" id="game-emoji-btn">😀</button>
+          <input type="text" id="game-chat-input" placeholder="메시지 입력..." maxlength="200">
+          <button class="btn btn-send" id="game-chat-send">전송</button>
+          <button class="btn btn-cheer" id="btn-cheer">📣 응원!</button>
+        </div>
+        <div class="emoji-picker hidden" id="game-emoji-picker"></div>
+      </div>
+    </div>
+
+    <!-- 결과 화면 -->
+    <div id="result-screen" class="screen">
+      <div class="result-container">
+        <h2>라운드 <span id="result-round">1</span> 결과</h2>
+
+        <div class="winner-display">
+          <span class="crown">👑</span>
+          <span id="winner-emoji" class="winner-emoji"></span>
+          <span id="winner-name" class="winner-name"></span>
+        </div>
+
+        <div class="results-list" id="results-list">
+          <!-- 결과가 동적으로 생성됨 -->
+        </div>
+
+        <div class="my-result" id="my-result">
+          <!-- 내 결과 표시 -->
+        </div>
+
+        <p class="next-round-notice">5초 후 다음 라운드...</p>
+      </div>
+    </div>
+
+    <!-- 게임 오버 화면 -->
+    <div id="gameover-screen" class="screen">
+      <div class="gameover-container">
+        <h2>게임 종료</h2>
+        <p id="gameover-message"></p>
+
+        <div class="final-results" id="final-results">
+          <!-- 최종 결과 -->
+        </div>
+
+        <button id="btn-back-to-lobby" class="btn btn-primary">로비로 돌아가기</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 토스트 메시지 -->
+  <div id="toast" class="toast"></div>
+
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="/js/SocketClient.js"></script>
+  <script src="/js/GameRenderer.js"></script>
+  <script src="/js/UIManager.js"></script>
+  <script src="/js/main.js"></script>
+</body>
+</html>

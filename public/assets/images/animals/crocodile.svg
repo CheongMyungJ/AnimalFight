@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <!-- Body -->
+  <ellipse cx="50" cy="65" rx="40" ry="25" fill="#3E5F3E"/>
+  <!-- Scales on body -->
+  <ellipse cx="30" cy="60" rx="8" ry="5" fill="#2E4A2E"/>
+  <ellipse cx="50" cy="58" rx="8" ry="5" fill="#2E4A2E"/>
+  <ellipse cx="70" cy="60" rx="8" ry="5" fill="#2E4A2E"/>
+  <ellipse cx="40" cy="70" rx="7" ry="4" fill="#2E4A2E"/>
+  <ellipse cx="60" cy="70" rx="7" ry="4" fill="#2E4A2E"/>
+  <!-- Head/Snout -->
+  <path d="M50 40 L25 25 L20 35 L15 30 L20 45 L50 50 Z" fill="#4A7A4A"/>
+  <path d="M50 40 L75 25 L80 35 L85 30 L80 45 L50 50 Z" fill="#4A7A4A"/>
+  <!-- Snout top -->
+  <ellipse cx="50" cy="38" rx="30" ry="12" fill="#4A7A4A"/>
+  <!-- Nostrils -->
+  <ellipse cx="25" cy="32" rx="4" ry="3" fill="#2E4A2E"/>
+  <ellipse cx="75" cy="32" rx="4" ry="3" fill="#2E4A2E"/>
+  <!-- Eyes -->
+  <ellipse cx="38" cy="42" rx="7" ry="8" fill="#FFEB3B"/>
+  <ellipse cx="62" cy="42" rx="7" ry="8" fill="#FFEB3B"/>
+  <ellipse cx="38" cy="42" rx="3" ry="5" fill="#1a1a1a"/>
+  <ellipse cx="62" cy="42" rx="3" ry="5" fill="#1a1a1a"/>
+  <!-- Eye ridges -->
+  <path d="M30 38 Q38 32 46 38" stroke="#2E4A2E" stroke-width="3" fill="none"/>
+  <path d="M54 38 Q62 32 70 38" stroke="#2E4A2E" stroke-width="3" fill="none"/>
+  <!-- Teeth -->
+  <path d="M28 48 L30 53 L32 48" fill="#FFF"/>
+  <path d="M38 49 L40 54 L42 49" fill="#FFF"/>
+  <path d="M58 49 L60 54 L62 49" fill="#FFF"/>
+  <path d="M68 48 L70 53 L72 48" fill="#FFF"/>
+  <!-- Jaw line -->
+  <path d="M20 48 Q50 55 80 48" stroke="#2E4A2E" stroke-width="2" fill="none"/>
+</svg>

@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <!-- Head feathers -->
+  <ellipse cx="50" cy="40" rx="35" ry="30" fill="#4A3728"/>
+  <!-- White head -->
+  <ellipse cx="50" cy="45" rx="30" ry="28" fill="#FFF"/>
+  <!-- Feather tufts -->
+  <path d="M25 25 Q30 15 35 25" fill="#4A3728"/>
+  <path d="M65 25 Q70 15 75 25" fill="#4A3728"/>
+  <!-- Eyes -->
+  <ellipse cx="38" cy="42" rx="8" ry="9" fill="#1a1a1a"/>
+  <ellipse cx="62" cy="42" rx="8" ry="9" fill="#1a1a1a"/>
+  <circle cx="40" cy="40" r="3" fill="#FFD700"/>
+  <circle cx="64" cy="40" r="3" fill="#FFD700"/>
+  <circle cx="40" cy="40" r="1.5" fill="#1a1a1a"/>
+  <circle cx="64" cy="40" r="1.5" fill="#1a1a1a"/>
+  <!-- Brow -->
+  <path d="M28 35 L45 38" stroke="#4A3728" stroke-width="3" fill="none"/>
+  <path d="M72 35 L55 38" stroke="#4A3728" stroke-width="3" fill="none"/>
+  <!-- Beak -->
+  <path d="M50 50 L40 58 L50 85 L60 58 Z" fill="#FFB300"/>
+  <path d="M50 50 L45 55 L50 75 L55 55 Z" fill="#FF8C00"/>
+  <!-- Beak hook -->
+  <path d="M47 75 Q50 82 53 75" fill="#FFB300"/>
+</svg>
