@@ -127,7 +127,7 @@ class GameRoom {
 
   calculateResults(winningAnimalId) {
     const results = [];
-    const participantCount = this.players.size;
+    const animalCount = config.ANIMALS.length; // 동물 수 (8마리)
 
     this.players.forEach((player, socketId) => {
       const bet = this.bets.get(socketId);
@@ -146,7 +146,7 @@ class GameRoom {
       }
 
       if (bet.animalId === winningAnimalId) {
-        const reward = Math.floor(bet.amount * participantCount * (1 - config.HOUSE_CUT));
+        const reward = Math.floor(bet.amount * animalCount * (1 - config.HOUSE_CUT));
         player.coins += reward;
 
         results.push({

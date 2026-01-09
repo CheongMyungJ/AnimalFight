@@ -12,7 +12,7 @@ module.exports = {
   ],
 
   // 플레이어 설정
-  INITIAL_COINS: 500,
+  INITIAL_COINS: 300,
   MIN_BET: 10,
   MAX_BET: 100,
   HOUSE_CUT: 0.05,
